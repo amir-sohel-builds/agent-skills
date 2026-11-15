@@ -1,0 +1,1 @@
+{"initiatives":[{"depends_on":["I2"],"hours":10,"id":"I1","name":"Auth refresh","priority":"P0","team":"Platform","week":"W1"},{"depends_on":[],"hours":10,"id":"I2","name":"Checkout rebuild","priority":"P0","team":"Platform","week":"W2"}]}

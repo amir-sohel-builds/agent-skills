@@ -13,12 +13,23 @@ def main():
     p.add_argument("--since", default=None)
     p.add_argument("--output", default=None)
     args = p.parse_args()
-    with open(args.workstreams) as f:
-        streams = json.load(f).get("workstreams", [])
-    with open(args.risks) as f:
-        risks = json.load(f).get("risks", [])
-    with open(args.decisions) as f:
-        decisions = json.load(f).get("decisions", [])
+    def load_list(path, key):
+        with open(path) as f:
+            data = json.load(f)
+        if isinstance(data, list):
+            return data
+        return data.get(key, [])
+
+    def blocker_text(b):
+        if isinstance(b, dict):
+            text = b.get("text", "")
+            owner = b.get("owner")
+            return f"{text} (owner: {owner})" if owner else text
+        return b
+
+    streams = load_list(args.workstreams, "workstreams")
+    risks = load_list(args.risks, "risks")
+    decisions = load_list(args.decisions, "decisions")
     red = [w for w in streams if w.get("status") == "red"]
     amber = [w for w in streams if w.get("status") == "amber"]
     green = [w for w in streams if w.get("status") == "green"]
@@ -32,7 +43,7 @@ def main():
     if not red and not top:
         lines.append("No decisions needed.\n")
     for w in red:
-        lines.append(f"- **{w['name']}** ({w.get('owner', 'no owner')}): {', '.join(w.get('blockers', [])) or 'no blocker named'}")
+        lines.append(f"- **{w['name']}** ({w.get('owner', 'no owner')}): {', '.join(blocker_text(b) for b in w.get('blockers', [])) or 'no blocker named'}")
     for r in top:
         lines.append(f"- Risk **{r['id']}** {r['title']} (score {r['likelihood'] * r['impact']}, owner: {r.get('owner') or 'NONE'})")
     lines.append("")

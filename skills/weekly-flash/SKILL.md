@@ -6,7 +6,7 @@ description: Turn the week's shipped work into a one-page flash report. Use at t
 # Weekly flash
 
 ## Inputs
-- `examples/week.json` shows the shape: a week label, and three lists, shipped, fixed, and next, each item one line with an optional link.
+- `examples/week.json` shows the shape: a week label, and three lists, shipped, fixed, and next, each item one line with an optional link and an optional `by` name.
 
 ## Run
 ```bash

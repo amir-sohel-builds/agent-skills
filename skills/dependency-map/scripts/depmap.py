@@ -12,6 +12,8 @@ def main():
     args = p.parse_args()
     with open(args.input) as f:
         data = json.load(f)
+    if isinstance(data, list):
+        data = {"workstreams": data}
     items = {w["id"]: w for w in data.get("workstreams", [])}
     warnings = []
     for w in data.get("workstreams", []):

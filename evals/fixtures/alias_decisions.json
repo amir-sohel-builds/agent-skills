@@ -1,0 +1,1 @@
+{"decisions":[{"alternatives":["Stay and pay more","Build in-house"],"context":"The old provider raises prices in January.","date":"2026-11-01","decider":"Priya","id":1,"reversal_criteria":"Cost rises above the old provider for two months","status":"open","title":"Move the ledger"}]}

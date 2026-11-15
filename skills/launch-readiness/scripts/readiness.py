@@ -11,6 +11,8 @@ def main():
     args = p.parse_args()
     with open(args.input) as f:
         data = json.load(f)
+    if isinstance(data, list):
+        data = {"items": data}
     items = data.get("items", [])
     reasons = []
     na = []

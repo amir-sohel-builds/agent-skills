@@ -11,8 +11,9 @@ description: Log decisions with date, context, and decider. Use whenever a decis
 ## Run
 Log a decision:
 ```bash
-python3 scripts/decisions.py add --title "Ship the new checkout flow" --context "Error rate is flat for two weeks." --decider "Priya"
+python3 scripts/decisions.py add --title "Ship the new checkout flow" --context "Error rate is flat for two weeks." --decider "Priya" --alternatives "Wait one week" "Ship behind a flag" --reversal "Roll back if the error rate rises above 1 percent for one hour."
 ```
+The `--alternatives` and `--reversal` flags are optional here, but log them when you have them. A decision without them will not pass decision-review.
 List what is still open:
 ```bash
 python3 scripts/decisions.py list

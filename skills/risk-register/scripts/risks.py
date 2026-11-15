@@ -11,6 +11,8 @@ def main():
     args = p.parse_args()
     with open(args.input) as f:
         data = json.load(f)
+    if isinstance(data, list):
+        data = {"risks": data}
     risks = []
     for r in data.get("risks", []):
         r = dict(r)

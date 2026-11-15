@@ -8,7 +8,7 @@ CHECKS = [
     ("decider", lambda d: bool(d.get("decider"))),
     ("context", lambda d: len((d.get("context") or "").strip()) >= 10),
     ("alternatives", lambda d: len(d.get("alternatives") or []) >= 2),
-    ("reversal criteria", lambda d: bool((d.get("reversal") or "").strip())),
+    ("reversal criteria", lambda d: bool((d.get("reversal") or d.get("reversal_criteria") or "").strip())),
 ]
 
 
@@ -19,6 +19,8 @@ def main():
     args = p.parse_args()
     with open(args.input) as f:
         data = json.load(f)
+    if isinstance(data, list):
+        data = {"decisions": data}
     open_ds = [d for d in data.get("decisions", []) if d.get("status") == "open"]
     closed_ds = [d for d in data.get("decisions", []) if d.get("status") != "open"]
     complete, incomplete = [], []
