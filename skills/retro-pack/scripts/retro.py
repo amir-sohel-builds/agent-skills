@@ -13,7 +13,10 @@ def main():
     with open(args.week) as f:
         week = json.load(f)
     with open(args.workstreams) as f:
-        streams = json.load(f).get("workstreams", [])
+        wsdata = json.load(f)
+    if isinstance(wsdata, list):
+        wsdata = {"workstreams": wsdata}
+    streams = wsdata.get("workstreams", [])
     blocked = [w for w in streams if w.get("status") in ("red", "amber")]
     lines = [f"# Retro, {week.get('week', 'this week')}\n"]
     lines.append("## What shipped\n")
@@ -34,6 +37,10 @@ def main():
     for w in blocked:
         lines.append(f"- **{w['name']}** ({w.get('owner', 'no owner')}, {w.get('status')})")
         for b in w.get("blockers", []):
+            if isinstance(b, dict):
+                text = b.get("text", "")
+                owner = b.get("owner")
+                b = f"{text} (owner: {owner})" if owner else text
             lines.append(f"  - {b}")
     lines.append("")
     lines.append("## Agenda (45 minutes)\n")

@@ -10,7 +10,10 @@ from datetime import date
 def load(path):
     if os.path.exists(path):
         with open(path) as f:
-            return json.load(f)
+            data = json.load(f)
+        if isinstance(data, list):
+            return {"decisions": data}
+        return data
     return {"decisions": []}
 
 
@@ -51,6 +54,8 @@ def main():
     add.add_argument("--context", required=True)
     add.add_argument("--decider", required=True)
     add.add_argument("--date", default=date.today().isoformat())
+    add.add_argument("--alternatives", nargs="*", default=[])
+    add.add_argument("--reversal", default="")
     sub.add_parser("list")
     close = sub.add_parser("close")
     close.add_argument("--id", type=int, required=True)
@@ -61,6 +66,7 @@ def main():
         data["decisions"].append({
             "id": next_id, "title": args.title, "context": args.context,
             "decider": args.decider, "date": args.date, "status": "open",
+            "alternatives": args.alternatives, "reversal": args.reversal,
         })
         save(args.file, data)
         render(args.output, data)

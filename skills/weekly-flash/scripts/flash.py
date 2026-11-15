@@ -10,8 +10,9 @@ def section(lines, title, items):
         return
     lines.append(f"## {title}\n")
     for item in items:
+        by = f", {item['by']}" if item.get("by") else ""
         link = f" ({item['link']})" if item.get("link") else ""
-        lines.append(f"- {item['text']}{link}")
+        lines.append(f"- {item['text']}{by}{link}")
     lines.append("")
 
 

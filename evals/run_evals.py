@@ -23,7 +23,12 @@ CASES = [
     {"name": "stakeholder-update", "cmd": ["python3", "skills/stakeholder-update/scripts/update.py", "--input", "skills/stakeholder-update/examples/workstreams.json"], "exit": 0, "contains": ["Decisions needed"]},
     {"name": "decision-log", "cmd": ["python3", "skills/decision-log/scripts/decisions.py", "--file", "skills/decision-log/examples/decisions.json", "list"], "exit": 0, "contains": ["Ship the new checkout flow"]},
     {"name": "launch-readiness", "cmd": ["python3", "skills/launch-readiness/scripts/readiness.py", "--input", "skills/launch-readiness/examples/checklist.json"], "exit": 1, "contains": ["NO-GO"]},
-    {"name": "weekly-flash", "cmd": ["python3", "skills/weekly-flash/scripts/flash.py", "--input", "skills/weekly-flash/examples/week.json"], "exit": 0, "contains": ["Weekly flash"]},
+    {"name": "weekly-flash", "cmd": ["python3", "skills/weekly-flash/scripts/flash.py", "--input", "skills/weekly-flash/examples/week.json"], "exit": 0, "contains": ["Weekly flash", "Priya"]},
+    {"name": "bare list input (depmap)", "cmd": ["python3", "skills/dependency-map/scripts/depmap.py", "--input", "evals/fixtures/bare_workstreams.json"], "exit": 1, "contains": ["d -> e -> d"]},
+    {"name": "bare list input (risks)", "cmd": ["python3", "skills/risk-register/scripts/risks.py", "--input", "evals/fixtures/bare_risks.json"], "exit": 0, "contains": ["R1", "score 20"]},
+    {"name": "field aliases (rollup)", "cmd": ["python3", "skills/status-rollup/scripts/rollup.py", "--input", "evals/fixtures/alias_workstreams.json"], "exit": 0, "contains": ["Refund flow live Nov 28", "Ledger sync is down (owner: Ravi)"]},
+    {"name": "field alias (review)", "cmd": ["python3", "skills/decision-review/scripts/review.py", "--input", "evals/fixtures/alias_decisions.json"], "exit": 0, "contains": ["Complete: 1"]},
+    {"name": "field alias (quarter)", "cmd": ["python3", "skills/quarterly-plan/scripts/quarter.py", "--teams", "evals/fixtures/alias_teams.json", "--initiatives", "evals/fixtures/alias_initiatives.json"], "exit": 1, "contains": ["Auth refresh is scheduled W1", "Ordering violations: 1"]},
     {"name": "report-trust-check", "cmd": ["python3", "skills/report-trust-check/scripts/check_csv.py", "--file", "skills/report-trust-check/examples/data.csv", "--date-col", "updated_at", "--stale-days", "7", "--key-col", "id"], "exit": 0, "contains": ["duplicate key"]},
     {"name": "retro-pack", "cmd": ["python3", "skills/retro-pack/scripts/retro.py", "--week", "skills/retro-pack/examples/week.json", "--workstreams", "skills/retro-pack/examples/workstreams.json"], "exit": 0, "contains": ["Retro"]},
     {"name": "quarterly-plan", "cmd": ["python3", "skills/quarterly-plan/scripts/quarter.py", "--teams", "skills/quarterly-plan/examples/teams.json", "--initiatives", "skills/quarterly-plan/examples/initiatives.json"], "exit": 1, "contains": ["OVER", "Ordering violations"]},
@@ -61,6 +66,15 @@ def main():
         code, out = run(["python3", os.path.join(ROOT, "skills/release-notes/scripts/release_notes.py"), "--from", "v1.2.0", "--to", "HEAD"], cwd=d)
         ok = code == 0 and "retry on timeout" in out
         print(f"[{'PASS' if ok else 'FAIL'}] release-notes")
+        if not ok:
+            failures += 1
+    # A decision logged with alternatives and reversal passes review.
+    with tempfile.TemporaryDirectory() as d:
+        dec = os.path.join(d, "decisions.json")
+        code, _ = run(["python3", os.path.join(ROOT, "skills/decision-log/scripts/decisions.py"), "--file", dec, "add", "--title", "Move the ledger", "--context", "The old provider raises prices in January.", "--decider", "Priya", "--alternatives", "Stay", "Build", "--reversal", "Revisit if cost rises"], cwd=d)
+        code2, out2 = run(["python3", os.path.join(ROOT, "skills/decision-review/scripts/review.py"), "--input", dec], cwd=d)
+        ok = code == 0 and code2 == 0 and "Complete: 1" in out2
+        print(f"[{'PASS' if ok else 'FAIL'}] decision-log feeds decision-review")
         if not ok:
             failures += 1
     # Deployed copies match the canonical tool files.
