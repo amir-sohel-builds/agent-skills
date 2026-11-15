@@ -1,0 +1,63 @@
+# PR Reviewer: scans every pull request, and scans the repo itself on a fixed schedule.
+# Security design: the PR job runs on pull_request_target so it can post
+# comments on PRs from forks. It NEVER runs code from the PR. The scanner script
+# comes from the base branch, and only the diff text (never executed) is read
+# from the PR. A REQUEST CHANGES verdict fails the check, so the PR cannot
+# merge while branch protection requires it.
+# The nightly job runs on a fixed cron, 02:00 UTC every day, and scans the
+# whole repo. If it finds anything Critical or High, it opens an issue.
+# You can also run it right now from the Actions tab, Run workflow.
+name: PR Reviewer
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+  schedule:
+    - cron: "0 2 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+concurrency:
+  group: pr-review-${{ github.event.pull_request.number || 'nightly' }}
+  cancel-in-progress: true
+
+jobs:
+  review:
+    if: github.event_name == 'pull_request_target'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out base branch (scanner comes from here, never from the PR)
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: ${{ github.event.pull_request.base.ref }}
+      - name: Get the PR diff (read only, never executed)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: gh pr diff "$PR_NUMBER" --patch > pr.diff
+      - name: Run the PR reviewer
+        run: python3 .github/scripts/review.py --diff pr.diff --output review.md
+      - name: Post the review
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: test -f review.md && gh pr comment "$PR_NUMBER" --body-file review.md || echo "no review to post"
+
+  nightly:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Scan the repo
+        run: python3 .github/scripts/review.py --files . --exclude .github/scripts/review.py --exclude tools-and-automation/pr-reviewer/examples --output nightly.md
+      - name: Open an issue when the scan finds anything critical or high
+        if: failure()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh issue create --title "Nightly security scan findings" --body-file nightly.md

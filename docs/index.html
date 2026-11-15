@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>agent-skills, a TPM suite</title>
+<meta name="description" content="Sixteen deterministic tools for planning, running, and reporting programs. Every skill ships a runnable script.">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="hero">
+  <div class="mark">A.</div>
+  <p class="kicker">AMIR SOHEL, STAFF TECHNICAL PROGRAM MANAGER</p>
+  <h1>agent-skills</h1>
+  <p class="tag">A TPM suite. Sixteen tools that run.</p>
+  <p class="intro">Tools I use to run programs, built so any TPM can use them at any company. Each skill does one job, takes a real input, and produces a real artifact. No advice dressed as a tool. Every skill ships a script. If it cannot be run, it is not in this repo. Examples use real team sizes, not toy ones.</p>
+  <div class="install">
+    <code id="install-cmd">git clone https://github.com/amir-sohel-builds/agent-skills.git &amp;&amp; cd agent-skills &amp;&amp; bash install.sh</code>
+    <button id="copy-btn" type="button">Copy</button>
+  </div>
+  <p class="links"><a href="https://github.com/amir-sohel-builds/agent-skills">View on GitHub</a> &middot; <a href="https://amir-sohel-builds.github.io">My portfolio</a></p>
+</header>
+<main>
+  <section>
+    <p class="section-label">&sect;01 Plan it</p>
+    <h2>The ones that scope the work</h2>
+    <div class="cards">
+      <article class="card"><h3><a href="https://github.com/amir-sohel-builds/agent-skills/tree/main/skills/scope-plan">scope-plan</a></h3><p>Turns a vague request into a scoped plan, then checks the plan is complete.</p></article>
+      <article class="card"><h3><a href="https://github.com/amir-sohel-builds/agent-skills/tree/main/skills/dependency-map">dependency-map</a></h3><p>Builds a dependency map from work items. Finds cycles, orphans, and the critical path.</p></article>
+      <article class="card"><h3><a href="https://github.com/amir-sohel-builds/agent-skills/tree/main/skills/capacity-plan">capacity-plan</a></h3><p>Matches committed work against team capacity, by person and by week. Flags over-allocation.</p></article>
+      <article class="card"><h3><a href="https://github.com/amir-sohel-builds/agent-skills/tree/main/skills/risk-register">risk-register</a></h3><p>Scores risks by likelihood times impact, sorts them, and flags the top ones.</p></article>
+    </div>
+  </section>
+  <section>
+    <p class="section-label">&sect;02 Run it</p>
+    <h2>The ones that run the program</h2>
+    <div class="cards">
+      <article class="card"><h3><a href="https://github.com/amir-sohel-builds/agent-skills/tree/main/skills/status-rollup">status-rollup</a></h3><p>Rolls up workstreams into one honest status page, blockers named.</p></article>
+      <article class="card"><h3><a href="https://github.com/amir-sohel-builds/agent-skills/tree/main/skills/stakeholder-update">stakeholder-update</a></h3><p>Turns the same status file into a one-page exec update. Risks first.</p></article>
+      <article class="card"><h3><a href="https://github.com/amir-sohel-builds/agent-skills/tree/main/skills/decision-log">decision-log</a></h3><p>Logs decisions with date, context, and decider. Lists what is still open.</p></article>
+      <article class="card"><h3><a href="https://github.com/amir-sohel-builds/agent-skills/tree/main/skills/launch-readiness">launch-readiness</a></h3><p>Evaluates a launch checklist. GO only when every required item is yes.</p></article>
+    </div>
+  </section>
+  <section>
+    <p class="section-label">&sect;03 Prove it</p>
+    <h2>The ones that show the work</h2>
+    <div class="cards">
+      <article class="card"><h3><a href="https://github.com/amir-sohel-builds/agent-skills/tree/main/skills/weekly-flash">weekly-flash</a></h3><p>Turns the week's shipped work into a one-page flash report.</p></article>
+      <article class="card"><h3><a href="https://github.com/amir-sohel-builds/agent-skills/tree/main/skills/release-notes">release-notes</a></h3><p>Turns merged work since the last tag into human release notes.</p></article>
+      <article class="card"><h3><a href="https://github.com/amir-sohel-builds/agent-skills/tree/main/skills/report-trust-check">report-trust-check</a></h3><p>Audits the data behind a report: stale rows, missing values, duplicates.</p></article>
+      <article class="card"><h3><a href="https://github.com/amir-sohel-builds/agent-skills/tree/main/skills/retro-pack">retro-pack</a></h3><p>Assembles a retro pack from the week's facts: shipped, broken, still blocked.</p></article>
+      <article class="card"><h3><a href="https://github.com/amir-sohel-builds/agent-skills/tree/main/tools-and-automation/pr-reviewer">pr-reviewer</a></h3><p>Reviews a pull request for secrets, dangerous patterns, and quality issues, before a human approves it. Ships as a GitHub Action. Lives in tools-and-automation.</p></article>
+    </div>
+  </section>
+  <section>
+    <p class="section-label">&sect;04 Lead it</p>
+    <h2>The ones that work at org scale</h2>
+    <div class="cards">
+      <article class="card"><h3><a href="https://github.com/amir-sohel-builds/agent-skills/tree/main/skills/quarterly-plan">quarterly-plan</a></h3><p>Builds a quarter plan across teams: load against capacity, cross-team dependencies, ordering checks.</p></article>
+      <article class="card"><h3><a href="https://github.com/amir-sohel-builds/agent-skills/tree/main/skills/decision-review">decision-review</a></h3><p>Grades open decisions for quality: decider, context, alternatives, reversal criteria.</p></article>
+      <article class="card"><h3><a href="https://github.com/amir-sohel-builds/agent-skills/tree/main/skills/exec-review-pack">exec-review-pack</a></h3><p>Builds a one-page exec review pack from status, risks, and decisions.</p></article>
+    </div>
+  </section>
+  <section>
+    <p class="section-label">Evals</p>
+    <h2>Every skill is tested</h2>
+    <p>Run <code>python3 evals/run_evals.py</code>. It runs all sixteen skills against their examples, checks their outputs, tests the installer, and checks the whole repo for company info. A skill that fails its eval is not shipped.</p>
+  </section>
+  <section>
+    <p class="section-label">Tools and automation</p>
+    <h2>The action runs itself</h2>
+    <p>The PR reviewer lives in <code>tools-and-automation/</code> and is already deployed in this repo. It reviews every pull request, and it scans the repo itself every night at 02:00 UTC. To see it run right away, open the Actions tab, select PR Reviewer, and click Run workflow.</p>
+  </section>
+  <section>
+    <p class="section-label">Security</p>
+    <h2>Scanned before it ships</h2>
+    <p>The repo is audited and clean, see <code>SECURITY.md</code>. The evals run the pr-reviewer scanner over the whole repo and fail on any Critical or High finding. The same scanner ships as a GitHub Action, so any repo can review every pull request before a human approves it.</p>
+  </section>
+  <section>
+    <p class="section-label">How a skill works</p>
+    <h2>One folder, one job, one script</h2>
+    <p>Each skill lives in <code>skills/&lt;name&gt;/</code> and has a <code>SKILL.md</code> file in a fixed shape: Inputs, Run, Output, Rules, and What it does not do. The script lives under <code>scripts/</code> and the worked example under <code>examples/</code>. The script is the skill. The SKILL.md tells you how to run it and how to read what comes out.</p>
+    <p>Claude Code picks up skills from <code>~/.claude/skills</code>. After installing, just describe the job, for example &ldquo;roll up this week's status from workstreams.json&rdquo;, and the matching skill loads. The same files work in Cursor from <code>~/.cursor/skills</code>.</p>
+  </section>
+</main>
+<footer>
+  <p>Built by Amir Sohel. I build what I dream.</p>
+</footer>
+<script>
+document.getElementById('copy-btn').addEventListener('click', function () {
+  var text = document.getElementById('install-cmd').textContent;
+  navigator.clipboard.writeText(text).then(function () {
+    document.getElementById('copy-btn').textContent = 'Copied';
+  });
+});
+</script>
+</body>
+</html>
