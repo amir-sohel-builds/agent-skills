@@ -3,96 +3,228 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>agent-skills, a TPM suite</title>
-<meta name="description" content="Sixteen deterministic tools for planning, running, and reporting programs. Every skill ships a runnable script.">
-<link rel="stylesheet" href="styles.css">
+<title>agent-skills | TPM tools that run</title>
+<meta name="description" content="Sixteen TPM skills for planning, running, and reporting programs. Every skill ships a script, a worked example, and an eval. Works with Claude Code and Cursor.">
+<meta property="og:title" content="agent-skills | TPM tools that run">
+<meta property="og:description" content="Sixteen skills for planning, running, and reporting programs. Every one ships a script. No advice dressed as a tool.">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/svg+xml" href="logo.svg">
+<script>try{var r=document.documentElement,t=localStorage.getItem("theme");if(t)r.setAttribute("data-theme",t);}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root { --paper:#f5f6f8; --ink:#0b1220; --soft:#2b3548; --muted:#5b667a; --rule:#d3d8e0; --blue:#0154fc; --wash:#e4ecff;
+  --display:"Bricolage Grotesque","Helvetica Neue",Arial,sans-serif; --text:"Instrument Sans",-apple-system,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; }
+:root[data-theme="dark"] { --paper:#0a0f1a; --ink:#eef2f9; --soft:#c9d3e4; --muted:#93a1ba; --rule:#25304a; --blue:#6ea8fe; --wash:#12224a; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --paper:#0a0f1a; --ink:#eef2f9; --soft:#c9d3e4; --muted:#93a1ba; --rule:#25304a; --blue:#6ea8fe; --wash:#12224a; } }
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; scroll-padding-top:72px; }
+body { background:var(--paper); color:var(--ink); font:400 18px/1.6 var(--text); -webkit-font-smoothing:antialiased; }
+a { color:inherit; } a:focus-visible, button:focus-visible { outline:2px solid var(--blue); outline-offset:3px; }
+::selection { background:var(--blue); color:#fff; }
+.wrap { max-width:1040px; margin:0 auto; padding:0 clamp(20px,5vw,40px); }
+code, .mono { font-family:var(--mono); }
+
+.nav { position:sticky; top:0; z-index:10; background:color-mix(in srgb,var(--paper) 88%,transparent); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border-bottom:1px solid var(--rule); }
+.nav .wrap { display:flex; align-items:center; justify-content:space-between; height:58px; }
+.brand { display:flex; align-items:center; gap:9px; font:700 17px var(--display); letter-spacing:-0.01em; text-decoration:none; }
+.navr { display:flex; align-items:center; gap:24px; font-size:15px; font-weight:500; }
+.navr a { color:var(--muted); text-decoration:none; } .navr a:hover { color:var(--ink); }
+.navr button { font:600 13.5px var(--text); color:var(--ink); background:transparent; border:1px solid var(--rule); border-radius:999px; padding:6px 12px; cursor:pointer; }
+.navr button:hover { border-color:var(--blue); color:var(--blue); }
+@media (max-width:640px) { .navr .opt { display:none; } }
+
+h1,h2,h3 { font-family:var(--display); letter-spacing:-0.03em; text-wrap:balance; }
+h1 { font-weight:800; font-size:clamp(46px,8.4vw,104px); line-height:.98; letter-spacing:-0.04em; max-width:10em; }
+h2 { font-weight:700; font-size:clamp(30px,4.4vw,48px); line-height:1.06; }
+.lede { font-size:clamp(19px,2.2vw,24px); line-height:1.45; color:var(--soft); max-width:30em; }
+section { padding-top:clamp(64px,10vh,110px); }
+
+.hero { padding-top:clamp(60px,11vh,120px); }
+.hero .lede { margin-top:28px; }
+.install { margin-top:32px; display:flex; align-items:center; gap:10px; max-width:720px; border:1px solid var(--rule); border-radius:10px; padding:10px 10px 10px 16px; background:color-mix(in srgb,var(--ink) 4%,transparent); }
+.install code { flex:1; font-size:14px; overflow-x:auto; white-space:nowrap; scrollbar-width:none; }
+.install code::-webkit-scrollbar { display:none; }
+.install button { font:600 14px var(--text); color:#fff; background:var(--blue); border:0; border-radius:7px; padding:9px 16px; cursor:pointer; }
+.install button:hover { filter:brightness(1.1); }
+.hint { margin-top:12px; font-size:15px; color:var(--muted); }
+.hint a { color:var(--blue); font-weight:600; text-decoration:none; } .hint a:hover { text-decoration:underline; }
+
+/* signature: real output from a real run */
+.proof h2 { max-width:15em; } .proof .lede { margin-top:14px; font-size:18px; }
+.term { margin-top:32px; border-radius:12px; background:#0b1220; color:#dbe4f5; border:1px solid #25304a; overflow:hidden; }
+.term .bar { padding:10px 18px; font:500 13px var(--mono); color:#8fa0bf; border-bottom:1px solid #25304a; }
+.term pre { padding:20px 22px 24px; font:400 14.5px/1.7 var(--mono); overflow-x:auto; white-space:pre; }
+.term .c { color:#8fa0bf; } .term .k { color:#fff; font-weight:700; } .term .flag { color:#ffb86b; }
+.cap { margin-top:14px; color:var(--muted); font-size:16px; max-width:40em; }
+
+.rule { display:grid; grid-template-columns:5fr 7fr; gap:clamp(24px,5vw,64px); }
+.rule p { color:var(--soft); max-width:34em; } .rule p + p { margin-top:14px; }
+.rule .quote { font:700 clamp(26px,3.6vw,40px)/1.12 var(--display); letter-spacing:-0.03em; color:var(--blue); }
+@media (max-width:800px) { .rule { grid-template-columns:1fr; gap:18px; } }
+
+.skills { margin-top:34px; }
+.group { display:grid; grid-template-columns:5fr 7fr; gap:clamp(24px,5vw,64px); padding:30px 0; border-top:1px solid var(--rule); }
+.group h3 { font-size:26px; } .group .sub { margin-top:6px; color:var(--muted); font-size:16px; max-width:20em; }
+.group ul { list-style:none; }
+.group li { padding:9px 0; border-bottom:1px solid var(--rule); } .group li:last-child { border-bottom:0; }
+.group li a { text-decoration:none; display:grid; grid-template-columns:minmax(160px,200px) 1fr; gap:6px 18px; }
+.group li b { font:600 15px var(--mono); color:var(--blue); } .group li a:hover b { text-decoration:underline; }
+.group li span { font-size:16px; color:var(--soft); line-height:1.45; }
+@media (max-width:800px) { .group { grid-template-columns:1fr; gap:10px; } .group li a { grid-template-columns:1fr; } }
+
+.trust { display:grid; grid-template-columns:repeat(3,1fr); gap:clamp(20px,4vw,48px); margin-top:30px; }
+.trust h3 { font-size:21px; margin-bottom:8px; } .trust p { color:var(--soft); font-size:16.5px; }
+.trust code { font-size:14px; background:var(--wash); padding:1px 6px; border-radius:4px; }
+@media (max-width:800px) { .trust { grid-template-columns:1fr; } }
+
+.about { padding-bottom:clamp(56px,9vh,100px); } .about .lede { margin-top:16px; }
+.about .links { margin-top:24px; display:flex; flex-wrap:wrap; gap:12px; }
+.btn { display:inline-block; font:600 15.5px var(--text); text-decoration:none; padding:12px 22px; border-radius:8px; border:1px solid var(--ink); }
+.btn.primary { background:var(--ink); color:var(--paper); } .btn.primary:hover { background:var(--blue); border-color:var(--blue); color:#fff; }
+.btn.ghost:hover { border-color:var(--blue); color:var(--blue); }
+footer { border-top:1px solid var(--rule); padding:24px 0 36px; font-size:14px; color:var(--muted); }
+</style>
 </head>
 <body>
-<header class="hero">
-  <div class="mark">A.</div>
-  <p class="kicker">AMIR SOHEL, STAFF TECHNICAL PROGRAM MANAGER</p>
-  <h1>agent-skills</h1>
-  <p class="tag">A TPM suite. Sixteen tools that run.</p>
-  <p class="intro">Tools I use to run programs, built so any TPM can use them at any company. Each skill does one job, takes a real input, and produces a real artifact. No advice dressed as a tool. Every skill ships a script. If it cannot be run, it is not in this repo. Examples use real team sizes, not toy ones.</p>
+
+<header class="nav"><div class="wrap">
+  <a class="brand" href="#top"><img src="logo.svg" alt="" width="26" height="26">agent-skills</a>
+  <nav class="navr">
+    <a class="opt" href="#skills">Skills</a>
+    <a class="opt" href="#trust">Trust</a>
+    <a href="https://github.com/amir-sohel-builds/agent-skills">GitHub</a>
+    <button id="themeToggle" type="button">Dark</button>
+  </nav>
+</div></header>
+
+<main id="top">
+
+<section class="hero wrap">
+  <h1>TPM tools that run, not advice.</h1>
+  <p class="lede">Sixteen skills for planning, running, and reporting programs. Each takes a real input and produces a real artifact. Works with Claude Code and Cursor.</p>
   <div class="install">
-    <code id="install-cmd">git clone https://github.com/amir-sohel-builds/agent-skills.git &amp;&amp; cd agent-skills &amp;&amp; bash install.sh</code>
-    <button id="copy-btn" type="button">Copy</button>
+    <code id="cmd">git clone https://github.com/amir-sohel-builds/agent-skills.git &amp;&amp; cd agent-skills &amp;&amp; bash install.sh</code>
+    <button id="copy" type="button">Copy</button>
   </div>
-  <p class="links"><a href="https://github.com/amir-sohel-builds/agent-skills">View on GitHub</a> &middot; <a href="https://amir-sohel-builds.github.io">My portfolio</a></p>
-</header>
-<main>
-  <section>
-    <p class="section-label">&sect;01 Plan it</p>
-    <h2>The ones that scope the work</h2>
-    <div class="cards">
-      <article class="card"><h3><a href="https://github.com/amir-sohel-builds/agent-skills/tree/main/skills/scope-plan">scope-plan</a></h3><p>Turns a vague request into a scoped plan, then checks the plan is complete.</p></article>
-      <article class="card"><h3><a href="https://github.com/amir-sohel-builds/agent-skills/tree/main/skills/dependency-map">dependency-map</a></h3><p>Builds a dependency map from work items. Finds cycles, orphans, and the critical path.</p></article>
-      <article class="card"><h3><a href="https://github.com/amir-sohel-builds/agent-skills/tree/main/skills/capacity-plan">capacity-plan</a></h3><p>Matches committed work against team capacity, by person and by week. Flags over-allocation.</p></article>
-      <article class="card"><h3><a href="https://github.com/amir-sohel-builds/agent-skills/tree/main/skills/risk-register">risk-register</a></h3><p>Scores risks by likelihood times impact, sorts them, and flags the top ones.</p></article>
+  <p class="hint">Installs into <code>~/.claude/skills</code>, and <code>~/.cursor/skills</code> if you have it. Read <a href="https://github.com/amir-sohel-builds/agent-skills/blob/main/install.sh">install.sh</a> before you run it.</p>
+</section>
+
+<section class="proof wrap" aria-labelledby="proof-h">
+  <h2 id="proof-h">One command, one artifact</h2>
+  <p class="lede">This is a real run of <code>risk-register</code> on its bundled example, trimmed to the part that matters.</p>
+  <div class="term">
+    <div class="bar">skills/risk-register</div>
+<pre><span class="c">$</span> <span class="k">python3 scripts/risks.py --input risks.json --output RISKS.md</span>
+
+<span class="k">## Top risks (score 15 or more)</span>
+- <b>R1</b> Database cutover fails and checkout goes down (score 20, owner: Sam)
+
+<span class="k">## Flags</span>
+<span class="flag">- R3 has no owner</span>
+<span class="flag">- R3 has no mitigation</span>
+
+<span class="k">## Closed</span>
+- R4 Teams keep using the old dashboard (score 4)</pre>
+  </div>
+  <p class="cap">The tool does the arithmetic and names what is missing. It never judges likelihood or impact. The owner sets those numbers, because that is a human call.</p>
+</section>
+
+<section class="wrap" aria-labelledby="rule-h">
+  <div class="rule">
+    <div><h2 id="rule-h" class="quote">If it cannot be run, it is not in this repo.</h2></div>
+    <div>
+      <p>Every skill has exact inputs, one exact command, and one exact output. What needs human judgment is named as human judgment, not hidden inside the tool.</p>
+      <p>Each skill lives in one folder with a fixed <code>SKILL.md</code>: Inputs, Run, Output, Rules, and What it does not do. The script is the skill. The file tells you how to run it and how to read what comes out.</p>
     </div>
-  </section>
-  <section>
-    <p class="section-label">&sect;02 Run it</p>
-    <h2>The ones that run the program</h2>
-    <div class="cards">
-      <article class="card"><h3><a href="https://github.com/amir-sohel-builds/agent-skills/tree/main/skills/status-rollup">status-rollup</a></h3><p>Rolls up workstreams into one honest status page, blockers named.</p></article>
-      <article class="card"><h3><a href="https://github.com/amir-sohel-builds/agent-skills/tree/main/skills/stakeholder-update">stakeholder-update</a></h3><p>Turns the same status file into a one-page exec update. Risks first.</p></article>
-      <article class="card"><h3><a href="https://github.com/amir-sohel-builds/agent-skills/tree/main/skills/decision-log">decision-log</a></h3><p>Logs decisions with date, context, and decider. Lists what is still open.</p></article>
-      <article class="card"><h3><a href="https://github.com/amir-sohel-builds/agent-skills/tree/main/skills/launch-readiness">launch-readiness</a></h3><p>Evaluates a launch checklist. GO only when every required item is yes.</p></article>
-    </div>
-  </section>
-  <section>
-    <p class="section-label">&sect;03 Prove it</p>
-    <h2>The ones that show the work</h2>
-    <div class="cards">
-      <article class="card"><h3><a href="https://github.com/amir-sohel-builds/agent-skills/tree/main/skills/weekly-flash">weekly-flash</a></h3><p>Turns the week's shipped work into a one-page flash report.</p></article>
-      <article class="card"><h3><a href="https://github.com/amir-sohel-builds/agent-skills/tree/main/skills/release-notes">release-notes</a></h3><p>Turns merged work since the last tag into human release notes.</p></article>
-      <article class="card"><h3><a href="https://github.com/amir-sohel-builds/agent-skills/tree/main/skills/report-trust-check">report-trust-check</a></h3><p>Audits the data behind a report: stale rows, missing values, duplicates.</p></article>
-      <article class="card"><h3><a href="https://github.com/amir-sohel-builds/agent-skills/tree/main/skills/retro-pack">retro-pack</a></h3><p>Assembles a retro pack from the week's facts: shipped, broken, still blocked.</p></article>
-      <article class="card"><h3><a href="https://github.com/amir-sohel-builds/agent-skills/tree/main/tools-and-automation/pr-reviewer">pr-reviewer</a></h3><p>Reviews a pull request for secrets, dangerous patterns, and quality issues, before a human approves it. Ships as a GitHub Action. Lives in tools-and-automation.</p></article>
-    </div>
-  </section>
-  <section>
-    <p class="section-label">&sect;04 Lead it</p>
-    <h2>The ones that work at org scale</h2>
-    <div class="cards">
-      <article class="card"><h3><a href="https://github.com/amir-sohel-builds/agent-skills/tree/main/skills/quarterly-plan">quarterly-plan</a></h3><p>Builds a quarter plan across teams: load against capacity, cross-team dependencies, ordering checks.</p></article>
-      <article class="card"><h3><a href="https://github.com/amir-sohel-builds/agent-skills/tree/main/skills/decision-review">decision-review</a></h3><p>Grades open decisions for quality: decider, context, alternatives, reversal criteria.</p></article>
-      <article class="card"><h3><a href="https://github.com/amir-sohel-builds/agent-skills/tree/main/skills/exec-review-pack">exec-review-pack</a></h3><p>Builds a one-page exec review pack from status, risks, and decisions.</p></article>
-    </div>
-  </section>
-  <section>
-    <p class="section-label">Evals</p>
-    <h2>Every skill is tested</h2>
-    <p>Run <code>python3 evals/run_evals.py</code>. It runs all sixteen skills against their examples, checks their outputs, tests the installer, and checks the whole repo for company info. A skill that fails its eval is not shipped.</p>
-  </section>
-  <section>
-    <p class="section-label">Tools and automation</p>
-    <h2>The action runs itself</h2>
-    <p>The PR reviewer lives in <code>tools-and-automation/</code> and is already deployed in this repo. It reviews every pull request, and it scans the repo itself every night at 02:00 UTC. To see it run right away, open the Actions tab, select PR Reviewer, and click Run workflow.</p>
-  </section>
-  <section>
-    <p class="section-label">Security</p>
-    <h2>Scanned before it ships</h2>
-    <p>The repo is audited and clean, see <code>SECURITY.md</code>. The evals run the pr-reviewer scanner over the whole repo and fail on any Critical or High finding. The same scanner ships as a GitHub Action, so any repo can review every pull request before a human approves it.</p>
-  </section>
-  <section>
-    <p class="section-label">How a skill works</p>
-    <h2>One folder, one job, one script</h2>
-    <p>Each skill lives in <code>skills/&lt;name&gt;/</code> and has a <code>SKILL.md</code> file in a fixed shape: Inputs, Run, Output, Rules, and What it does not do. The script lives under <code>scripts/</code> and the worked example under <code>examples/</code>. The script is the skill. The SKILL.md tells you how to run it and how to read what comes out.</p>
-    <p>Claude Code picks up skills from <code>~/.claude/skills</code>. After installing, just describe the job, for example &ldquo;roll up this week's status from workstreams.json&rdquo;, and the matching skill loads. The same files work in Cursor from <code>~/.cursor/skills</code>.</p>
-  </section>
+  </div>
+</section>
+
+<section class="wrap skills" id="skills" aria-labelledby="skills-h">
+  <h2 id="skills-h">The sixteen</h2>
+  <div class="group" style="margin-top:28px">
+    <div><h3>Plan it</h3><p class="sub">Scope the work before it starts.</p></div>
+    <ul>
+      <li><a href="https://github.com/amir-sohel-builds/agent-skills/tree/main/skills/scope-plan"><b>scope-plan</b><span>Turns a vague request into a scoped plan, then checks the plan is complete.</span></a></li>
+      <li><a href="https://github.com/amir-sohel-builds/agent-skills/tree/main/skills/dependency-map"><b>dependency-map</b><span>Finds cycles, orphans, and the critical path from work items.</span></a></li>
+      <li><a href="https://github.com/amir-sohel-builds/agent-skills/tree/main/skills/capacity-plan"><b>capacity-plan</b><span>Matches committed work against capacity, by person and week. Flags over-allocation.</span></a></li>
+      <li><a href="https://github.com/amir-sohel-builds/agent-skills/tree/main/skills/risk-register"><b>risk-register</b><span>Scores risks by likelihood times impact, sorts them, flags the top ones.</span></a></li>
+    </ul>
+  </div>
+  <div class="group">
+    <div><h3>Run it</h3><p class="sub">Keep the program honest while it moves.</p></div>
+    <ul>
+      <li><a href="https://github.com/amir-sohel-builds/agent-skills/tree/main/skills/status-rollup"><b>status-rollup</b><span>Rolls workstreams into one honest status page, blockers named.</span></a></li>
+      <li><a href="https://github.com/amir-sohel-builds/agent-skills/tree/main/skills/stakeholder-update"><b>stakeholder-update</b><span>Turns the same status file into a one-page exec update. Risks first.</span></a></li>
+      <li><a href="https://github.com/amir-sohel-builds/agent-skills/tree/main/skills/decision-log"><b>decision-log</b><span>Logs decisions with date, context, and decider. Lists what is still open.</span></a></li>
+      <li><a href="https://github.com/amir-sohel-builds/agent-skills/tree/main/skills/launch-readiness"><b>launch-readiness</b><span>Evaluates a launch checklist. GO only when every required item is yes.</span></a></li>
+    </ul>
+  </div>
+  <div class="group">
+    <div><h3>Prove it</h3><p class="sub">Show the work, with data you can trust.</p></div>
+    <ul>
+      <li><a href="https://github.com/amir-sohel-builds/agent-skills/tree/main/skills/weekly-flash"><b>weekly-flash</b><span>Turns the week's shipped work into a one-page flash report.</span></a></li>
+      <li><a href="https://github.com/amir-sohel-builds/agent-skills/tree/main/skills/release-notes"><b>release-notes</b><span>Turns merged work since the last tag into human release notes.</span></a></li>
+      <li><a href="https://github.com/amir-sohel-builds/agent-skills/tree/main/skills/report-trust-check"><b>report-trust-check</b><span>Audits the data behind a report: stale rows, missing values, duplicates.</span></a></li>
+      <li><a href="https://github.com/amir-sohel-builds/agent-skills/tree/main/skills/retro-pack"><b>retro-pack</b><span>Assembles a retro from the week's facts: shipped, broken, still blocked.</span></a></li>
+      <li><a href="https://github.com/amir-sohel-builds/agent-skills/tree/main/tools-and-automation/pr-reviewer"><b>pr-reviewer</b><span>Reviews pull requests for secrets and dangerous patterns before a human approves. Ships as a GitHub Action.</span></a></li>
+    </ul>
+  </div>
+  <div class="group">
+    <div><h3>Lead it</h3><p class="sub">The same discipline, across teams.</p></div>
+    <ul>
+      <li><a href="https://github.com/amir-sohel-builds/agent-skills/tree/main/skills/quarterly-plan"><b>quarterly-plan</b><span>Builds a quarter plan across teams: load, cross-team dependencies, ordering checks.</span></a></li>
+      <li><a href="https://github.com/amir-sohel-builds/agent-skills/tree/main/skills/decision-review"><b>decision-review</b><span>Grades open decisions: decider, context, alternatives, reversal criteria.</span></a></li>
+      <li><a href="https://github.com/amir-sohel-builds/agent-skills/tree/main/skills/exec-review-pack"><b>exec-review-pack</b><span>Builds a one-page exec review from status, risks, and decisions.</span></a></li>
+    </ul>
+  </div>
+</section>
+
+<section class="wrap" id="trust" aria-labelledby="trust-h">
+  <h2 id="trust-h">Built to be trusted</h2>
+  <div class="trust">
+    <div><h3>Tested</h3><p>Every skill runs against its examples. <code>python3 evals/run_evals.py</code> checks all sixteen, tests the installer, and exits 1 on any failure. A skill that fails is not shipped.</p></div>
+    <div><h3>Scanned</h3><p>The repo was security audited, with no Critical or High findings. The evals run the same scanner as pr-reviewer over the whole repo and fail on either.</p></div>
+    <div><h3>Self-reviewing</h3><p>pr-reviewer is deployed on this repo. It reviews every pull request and scans the repo nightly. Open the Actions tab to watch it run.</p></div>
+  </div>
+</section>
+
+<section class="about wrap">
+  <h2>Built by a TPM who still ships</h2>
+  <p class="lede">I'm Amir Sohel, a Staff Technical Program Manager. These are the tools I use to run programs, built so any TPM can use them at any company. Small is a feature, and pull requests are open.</p>
+  <p class="links">
+    <a class="btn primary" href="https://github.com/amir-sohel-builds/agent-skills">View on GitHub</a>
+    <a class="btn ghost" href="https://amir-sohel-builds.github.io">My portfolio</a>
+  </p>
+</section>
+
 </main>
-<footer>
-  <p>Built by Amir Sohel. I build what I dream.</p>
-</footer>
+<footer><div class="wrap">MIT licensed. Use them, fork them, make them yours.</div></footer>
+
 <script>
-document.getElementById('copy-btn').addEventListener('click', function () {
-  var text = document.getElementById('install-cmd').textContent;
-  navigator.clipboard.writeText(text).then(function () {
-    document.getElementById('copy-btn').textContent = 'Copied';
+(function () {
+  var r = document.documentElement, tb = document.getElementById("themeToggle");
+  function cur() { return r.getAttribute("data-theme") || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"); }
+  function label() { var d = cur() === "dark"; tb.textContent = d ? "Light" : "Dark"; tb.setAttribute("aria-label", "Switch to " + (d ? "light" : "dark") + " mode"); }
+  label();
+  tb.addEventListener("click", function () {
+    var n = cur() === "dark" ? "light" : "dark";
+    r.setAttribute("data-theme", n);
+    try { localStorage.setItem("theme", n); } catch (e) {}
+    label();
   });
-});
+  var cb = document.getElementById("copy");
+  cb.addEventListener("click", function () {
+    var t = document.getElementById("cmd").textContent;
+    if (!navigator.clipboard) return;
+    navigator.clipboard.writeText(t).then(function () {
+      cb.textContent = "Copied";
+      setTimeout(function () { cb.textContent = "Copy"; }, 1800);
+    });
+  });
+})();
 </script>
 </body>
 </html>
