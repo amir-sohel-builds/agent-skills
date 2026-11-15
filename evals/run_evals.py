@@ -32,6 +32,7 @@ CASES = [
     {"name": "pr-reviewer dirty", "cmd": ["python3", "tools-and-automation/pr-reviewer/scripts/review.py", "--diff", "tools-and-automation/pr-reviewer/examples/pr.diff"], "exit": 1, "contains": ["REQUEST CHANGES", "Reviewed by PR Reviewer bot"]},
     {"name": "pr-reviewer clean", "cmd": ["python3", "tools-and-automation/pr-reviewer/scripts/review.py", "--diff", "tools-and-automation/pr-reviewer/examples/clean.diff"], "exit": 0, "contains": ["APPROVE", "Reviewed by PR Reviewer bot"]},
     {"name": "security gate", "cmd": ["python3", "tools-and-automation/pr-reviewer/scripts/review.py", "--files", "skills", "tools-and-automation", ".github", "README.md", "install.sh", "docs", "evals", "--exclude", "tools-and-automation/pr-reviewer/scripts/review.py", "--exclude", "tools-and-automation/pr-reviewer/examples", "--exclude", ".github/scripts/review.py"], "exit": 0, "contains": ["0 critical, 0 high"]},
+    {"name": "nightly scan", "cmd": ["python3", "tools-and-automation/pr-reviewer/scripts/review.py", "--files", ".", "--exclude", ".github/scripts/review.py", "--exclude", "tools-and-automation/pr-reviewer/scripts/review.py", "--exclude", "tools-and-automation/pr-reviewer/examples"], "exit": 0, "contains": ["0 critical, 0 high"]},
 ]
 
 

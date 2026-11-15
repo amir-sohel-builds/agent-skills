@@ -134,6 +134,7 @@ def scan_files(paths, excludes):
     findings = []
     checked = 0
     self_path = os.path.abspath(__file__)
+    excludes = [os.path.normpath(e) for e in excludes]
     for base in paths:
         if os.path.isfile(base):
             all_files = [base]
@@ -144,6 +145,7 @@ def scan_files(paths, excludes):
                 for fn in filenames:
                     all_files.append(os.path.join(dirpath, fn))
         for f in all_files:
+            f = os.path.normpath(f)
             if any(f == e or f.startswith(e.rstrip("/") + "/") for e in excludes):
                 continue
             if os.path.abspath(f) == self_path:
