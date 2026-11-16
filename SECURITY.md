@@ -33,4 +33,4 @@ The evals include a security check. `python3 evals/run_evals.py` runs the pr-rev
 
 The repo also scans itself. The PR Reviewer workflow is deployed at `.github/workflows/pr-review.yml` and runs on a fixed cron, every day at 02:00 UTC, scanning the whole repo. If it finds anything Critical or High, it opens an issue. You can also run it on demand from the Actions tab, Run workflow.
 
-To scan any repo's pull requests, use the pr-reviewer skill. It ships as a GitHub Action. See `skills/pr-reviewer/SKILL.md`.
+To scan any repo's pull requests, use the pr-reviewer skill. It ships as a GitHub Action. See `tools-and-automation/pr-reviewer/SKILL.md`.

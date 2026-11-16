@@ -1,6 +1,6 @@
 # agent-skills
 
-A TPM suite. Sixteen deterministic tools for planning, running, and reporting programs. No slop.
+A TPM suite. Seventeen deterministic tools for planning, running, and reporting programs. No slop.
 
 I am Amir Sohel, a Staff Technical Program Manager. These are the tools I use to run programs, built so any TPM can use them at any company. Each skill does one job, takes a real input, and produces a real artifact. No advice dressed as a tool.
 
@@ -41,6 +41,7 @@ bash install.sh --only risk-register
 | stakeholder-update | Turns the same status file into a one-page exec update. Risks first. |
 | decision-log | Logs decisions with date, context, and decider. Lists what is still open. |
 | launch-readiness | Evaluates a launch checklist. GO only when every required item is yes. |
+| agent-launch-readiness | Checks an agent spec before it goes live: owner, sources, evals, rollback, cost cap, approvals. GO only when all twelve checks pass. |
 
 ### Prove it
 
@@ -68,7 +69,7 @@ Every skill is tested against its examples. Run the evals with:
 python3 evals/run_evals.py
 ```
 
-It runs all sixteen skills, checks their outputs, tests the installer, and checks the whole repo for company info. It exits 1 when anything fails. A skill that fails its eval is not shipped.
+It runs all seventeen skills, checks their outputs, tests the installer, and checks the whole repo for company info. It exits 1 when anything fails. A skill that fails its eval is not shipped.
 
 ## Security
 
@@ -76,7 +77,7 @@ Audited 2026-11-14, see `SECURITY.md`. No Critical or High findings. Two Low fin
 
 ## Tools and automation
 
-Tools live in `tools-and-automation/`. The first one is pr-reviewer, a GitHub Action that reviews every pull request and scans the repo itself every night at 02:00 UTC. It is already deployed in this repo at `.github/workflows/pr-review.yml`, so it is live the moment the repo is uploaded. To see it run right away, open the Actions tab, select PR Reviewer, and click Run workflow. Upload the tools folder first, watch it run, then the rest of the repo.
+Tools live in `tools-and-automation/`. The first one is pr-reviewer, a GitHub Action that reviews every pull request and scans the repo itself every night at 02:00 UTC. It is already deployed in this repo at `.github/workflows/pr-review.yml`, so it runs on this repo too. To see it run right away, open the Actions tab, select PR Reviewer, and click Run workflow.
 
 ## How a skill works
 
