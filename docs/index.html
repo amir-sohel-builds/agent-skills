@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>agent-skills | TPM tools that run</title>
-<meta name="description" content="Sixteen TPM skills for planning, running, and reporting programs. Every skill ships a script, a worked example, and an eval. Works with Claude Code and Cursor.">
+<meta name="description" content="Seventeen TPM skills for planning, running, and reporting programs. Every skill ships a script, a worked example, and an eval. Works with Claude Code and Cursor.">
 <meta property="og:title" content="agent-skills | TPM tools that run">
-<meta property="og:description" content="Sixteen skills for planning, running, and reporting programs. Every one ships a script. No advice dressed as a tool.">
+<meta property="og:description" content="Seventeen skills for planning, running, and reporting programs. Every one ships a script. No advice dressed as a tool.">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/svg+xml" href="logo.svg">
 <script>try{var r=document.documentElement,t=localStorage.getItem("theme");if(t)r.setAttribute("data-theme",t);}catch(e){}</script>
@@ -104,7 +104,7 @@ footer { border-top:1px solid var(--rule); padding:24px 0 36px; font-size:14px; 
 
 <section class="hero wrap">
   <h1>TPM tools that run, not advice.</h1>
-  <p class="lede">Sixteen skills for planning, running, and reporting programs. Each takes a real input and produces a real artifact. Works with Claude Code and Cursor.</p>
+  <p class="lede">Seventeen skills for planning, running, and reporting programs. Each takes a real input and produces a real artifact. Works with Claude Code and Cursor.</p>
   <div class="install">
     <code id="cmd">git clone https://github.com/amir-sohel-builds/agent-skills.git &amp;&amp; cd agent-skills &amp;&amp; bash install.sh</code>
     <button id="copy" type="button">Copy</button>
@@ -143,7 +143,7 @@ footer { border-top:1px solid var(--rule); padding:24px 0 36px; font-size:14px; 
 </section>
 
 <section class="wrap skills" id="skills" aria-labelledby="skills-h">
-  <h2 id="skills-h">The sixteen</h2>
+  <h2 id="skills-h">The seventeen</h2>
   <div class="group" style="margin-top:28px">
     <div><h3>Plan it</h3><p class="sub">Scope the work before it starts.</p></div>
     <ul>
@@ -160,6 +160,7 @@ footer { border-top:1px solid var(--rule); padding:24px 0 36px; font-size:14px; 
       <li><a href="https://github.com/amir-sohel-builds/agent-skills/tree/main/skills/stakeholder-update"><b>stakeholder-update</b><span>Turns the same status file into a one-page exec update. Risks first.</span></a></li>
       <li><a href="https://github.com/amir-sohel-builds/agent-skills/tree/main/skills/decision-log"><b>decision-log</b><span>Logs decisions with date, context, and decider. Lists what is still open.</span></a></li>
       <li><a href="https://github.com/amir-sohel-builds/agent-skills/tree/main/skills/launch-readiness"><b>launch-readiness</b><span>Evaluates a launch checklist. GO only when every required item is yes.</span></a></li>
+      <li><a href="https://github.com/amir-sohel-builds/agent-skills/tree/main/skills/agent-launch-readiness"><b>agent-launch-readiness</b><span>Checks an agent spec before it goes live. GO only when owner, sources, evals, rollback, and cost cap all pass.</span></a></li>
     </ul>
   </div>
   <div class="group">
@@ -185,7 +186,7 @@ footer { border-top:1px solid var(--rule); padding:24px 0 36px; font-size:14px; 
 <section class="wrap" id="trust" aria-labelledby="trust-h">
   <h2 id="trust-h">Built to be trusted</h2>
   <div class="trust">
-    <div><h3>Tested</h3><p>Every skill runs against its examples. <code>python3 evals/run_evals.py</code> checks all sixteen, tests the installer, and exits 1 on any failure. A skill that fails is not shipped.</p></div>
+    <div><h3>Tested</h3><p>Every skill runs against its examples. <code>python3 evals/run_evals.py</code> checks all seventeen, tests the installer, and exits 1 on any failure. A skill that fails is not shipped.</p></div>
     <div><h3>Scanned</h3><p>The repo was security audited, with no Critical or High findings. The evals run the same scanner as pr-reviewer over the whole repo and fail on either.</p></div>
     <div><h3>Self-reviewing</h3><p>pr-reviewer is deployed on this repo. It reviews every pull request and scans the repo nightly. Open the Actions tab to watch it run.</p></div>
   </div>

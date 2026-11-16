@@ -1,0 +1,16 @@
+{
+  "name": "",
+  "owner": "",
+  "purpose": "",
+  "sources": [],
+  "refuses_without_source": false,
+  "eval": {"suite": false, "pass_rate": 0, "threshold": 90},
+  "rollback": {"one_step": false, "prompt_versioned": false},
+  "cost_cap_monthly": 0,
+  "actions": [],
+  "runs_as_caller": false,
+  "observability": false,
+  "handles_pii": false,
+  "pii_review_done": false,
+  "escalation_contact": ""
+}

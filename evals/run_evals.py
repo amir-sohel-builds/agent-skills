@@ -23,6 +23,8 @@ CASES = [
     {"name": "stakeholder-update", "cmd": ["python3", "skills/stakeholder-update/scripts/update.py", "--input", "skills/stakeholder-update/examples/workstreams.json"], "exit": 0, "contains": ["Decisions needed"]},
     {"name": "decision-log", "cmd": ["python3", "skills/decision-log/scripts/decisions.py", "--file", "skills/decision-log/examples/decisions.json", "list"], "exit": 0, "contains": ["Ship the new checkout flow"]},
     {"name": "launch-readiness", "cmd": ["python3", "skills/launch-readiness/scripts/readiness.py", "--input", "skills/launch-readiness/examples/checklist.json"], "exit": 1, "contains": ["NO-GO"]},
+    {"name": "agent-launch-readiness no-go", "cmd": ["python3", "skills/agent-launch-readiness/scripts/launch_check.py", "--input", "skills/agent-launch-readiness/examples/agent-bad.json"], "exit": 1, "contains": ["NO-GO", "A3", "A9", "Passed: 4/12"]},
+    {"name": "agent-launch-readiness go", "cmd": ["python3", "skills/agent-launch-readiness/scripts/launch_check.py", "--input", "skills/agent-launch-readiness/examples/agent-good.json"], "exit": 0, "contains": ["Verdict: GO", "Passed: 12/12"]},
     {"name": "weekly-flash", "cmd": ["python3", "skills/weekly-flash/scripts/flash.py", "--input", "skills/weekly-flash/examples/week.json"], "exit": 0, "contains": ["Weekly flash", "Priya"]},
     {"name": "bare list input (depmap)", "cmd": ["python3", "skills/dependency-map/scripts/depmap.py", "--input", "evals/fixtures/bare_workstreams.json"], "exit": 1, "contains": ["d -> e -> d"]},
     {"name": "bare list input (risks)", "cmd": ["python3", "skills/risk-register/scripts/risks.py", "--input", "evals/fixtures/bare_risks.json"], "exit": 0, "contains": ["R1", "score 20"]},
